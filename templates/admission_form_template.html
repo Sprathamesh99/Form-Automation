@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admission Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-container { border: 1px solid #ccc; padding: 20px; width: 400px; }
+        .photo { width: 120px; height: 120px; object-fit: cover; border: 1px solid #888; margin-bottom: 20px; }
+        .field { margin-bottom: 12px; }
+        .label { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Admission Form</h2>
+        <img src="{{ photo_path }}" alt="Photo" class="photo" />
+        <div class="field"><span class="label">Name:</span> {{ name }}</div>
+        <div class="field"><span class="label">Roll Number:</span> {{ roll_number }}</div>
+        <div class="field"><span class="label">Email:</span> {{ email }}</div>
+        <div class="field"><span class="label">Phone Number:</span> {{ phone_number }}</div>
+    </div>
+</body>
+</html> 

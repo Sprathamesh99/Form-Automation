@@ -1,0 +1,7 @@
+pandas
+openpyxl
+requests
+gdown
+python-docx
+fpdf
+Pillow 
