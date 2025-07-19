@@ -26,6 +26,16 @@ def download_photo(url, filename):
         print(f"Error downloading {url}: {e}")
         return None
 
+def get_drive_direct_link(share_link):
+    # Extract the FILE_ID from the share link
+    import re
+    match = re.search(r'/d/([a-zA-Z0-9_-]+)', share_link)
+    if match:
+        file_id = match.group(1)
+        return f'https://drive.google.com/uc?export=view&id={file_id}'
+    else:
+        return share_link  # fallback
+
 def main():
     # Step 1: Read CSV file
     df = pd.read_csv(DATA_PATH)
@@ -38,22 +48,18 @@ def main():
     for idx, row in df.iterrows():
         name = row['Name']
         roll_number = row['Roll Number']
-        photo_url = row['Photo']
+        photo_share_link = row['Photo']
         email = row['Email']
         phone = row['Phone Number']
 
-        # Download photo
-        photo_filename = os.path.join(PHOTO_DIR, f"{roll_number}.jpg")
-        if not os.path.exists(photo_filename):
-            downloaded = download_photo(photo_url, photo_filename)
-            if not downloaded:
-                photo_filename = None
+        # Convert Google Drive share link to direct link
+        photo_url = get_drive_direct_link(photo_share_link)
 
         # Fill template
         html_content = template.render(
             name=name,
             roll_number=roll_number,
-            photo_path=photo_filename if photo_filename else '',
+            photo_url=photo_url,
             email=email,
             phone_number=phone
         )
@@ -64,8 +70,11 @@ def main():
         # Convert HTML to PDF
         path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
         config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-        pdfkit.from_string(html_content, pdf_filename, configuration=config)
+        options = {
+            'enable-local-file-access': None
+        }
+        pdfkit.from_string(html_content, pdf_filename, configuration=config, options=options)
         print(f"Generated: {pdf_filename}")
 
 if __name__ == "__main__":
-    main() 
+    main()
