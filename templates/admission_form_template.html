@@ -14,7 +14,11 @@
 <body>
     <div class="form-container">
         <h2>Admission Form</h2>
-        <img src="{{ photo_path }}" alt="Photo" class="photo" />
+        {% if photo_path %}
+            <img src="{{ photo_path }}" alt="Photo" class="photo" />
+        {% else %}
+            <p>Photo not available.</p>
+        {% endif %}
         <div class="field"><span class="label">Name:</span> {{ name }}</div>
         <div class="field"><span class="label">Roll Number:</span> {{ roll_number }}</div>
         <div class="field"><span class="label">Email:</span> {{ email }}</div>
